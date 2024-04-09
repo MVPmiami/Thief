@@ -5,57 +5,43 @@ public class Alarm : MonoBehaviour
 {
     [SerializeField] private AudioSource _audioSource;
 
-    private Coroutine _fadeCoroutine;
+    private Coroutine _alarmCoroutine;
 
     public void On()
     {
-        if (_fadeCoroutine != null)
-            StopCoroutine(_fadeCoroutine);
-
-        _fadeCoroutine = StartCoroutine(FadeInAlarm(3f));
+        _alarmCoroutine = StartCoroutine(ChangeAlarmVolume(true));
     }
 
     public void Off()
     {
-        if (_fadeCoroutine != null)
-            StopCoroutine(_fadeCoroutine);
-
-        _fadeCoroutine = StartCoroutine(FadeOutAlarm(3f));
+        _alarmCoroutine = StartCoroutine(ChangeAlarmVolume(false));
     }
 
-    private IEnumerator FadeInAlarm(float duration)
+    private IEnumerator ChangeAlarmVolume(bool isVolumeUp)
     {
-        float startVolume = 0f;
+        float minVolume = 0f;
+        float maxVolume = 1f;
         float timer = 0f;
+        float duration = 3f;
 
-        _audioSource.volume = startVolume;
-        _audioSource.Play();
+        if (_alarmCoroutine != null)
+            StopCoroutine(_alarmCoroutine);
+
+        _audioSource.volume = isVolumeUp ? minVolume : maxVolume;
+
+        if (isVolumeUp)
+            _audioSource.Play();
 
         while (timer < duration)
         {
-            _audioSource.volume = Mathf.MoveTowards(startVolume, 1f, timer / duration);
-            timer += Time.deltaTime;
-
-            yield return null;
-        }
-    }
-
-    private IEnumerator FadeOutAlarm(float duration)
-    {
-        float startVolume = 1f;
-        float timer = 0f;
-
-        _audioSource.volume = startVolume;
-
-        while (timer < duration)
-        {
-            _audioSource.volume = Mathf.Lerp(startVolume, 0f, timer / duration);
+            _audioSource.volume = Mathf.MoveTowards(isVolumeUp ? minVolume : maxVolume, isVolumeUp ? maxVolume : minVolume, timer / duration);
             timer += Time.deltaTime;
 
             yield return null;
         }
 
-        _audioSource.Stop();
+        if (!isVolumeUp)
+            _audioSource.Stop();
     }
 }
 
