@@ -38,8 +38,6 @@ public class Alarm : MonoBehaviour
 
             yield return null;
         }
-
-        _audioSource.volume = 1f;
     }
 
     private IEnumerator FadeOutAlarm(float duration)
@@ -57,7 +55,6 @@ public class Alarm : MonoBehaviour
             yield return null;
         }
 
-        _audioSource.volume = 0f;
         _audioSource.Stop();
     }
 }

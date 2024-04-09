@@ -1,20 +1,22 @@
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
-public class ThiefController : MonoBehaviour
+[RequireComponent (typeof(Animator))]
+public class ThiefMover : MonoBehaviour
 {
     [SerializeField] private float _rotateSpeed;
     [SerializeField] private float _moveSpeed;
     [SerializeField] private AudioSource _audioSource;
 
-    private string Horizontal;
-    private string Vertical;
+    private const string Horizontal = nameof(Horizontal);
+    private const string Vertical = nameof(Vertical);
+
     private Animator _animator;
+    private readonly int Speed = Animator.StringToHash(nameof(Speed));
 
     private void Start()
     {
         _animator = GetComponent<Animator>();
-        Horizontal = nameof(Horizontal);
-        Vertical = nameof(Vertical);
     }
 
     private void Update()
@@ -34,7 +36,7 @@ public class ThiefController : MonoBehaviour
             _audioSource.Stop();
 
         transform.Translate(distance * Vector3.forward);
-        _animator.SetFloat("speed", Mathf.Abs(direction));
+        _animator.SetFloat(Speed, Mathf.Abs(direction));
     }
 
     private void Rotate()

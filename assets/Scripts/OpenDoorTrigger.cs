@@ -3,6 +3,7 @@
 public class OpenDoorTrigger : MonoBehaviour
 {
     [SerializeField] private Door _door;
+    [SerializeField] private DoorOpener _doorOpener;
 
     private bool _hasOpener;
     private bool _isOpened;
@@ -15,13 +16,13 @@ public class OpenDoorTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.GetComponent<DoorOpener>())
+        if (other.TryGetComponent<DoorOpener>(out _doorOpener))
             _hasOpener = true;
     }
     
     private void OnTriggerExit(Collider other)
     {
-        if (other.GetComponent<DoorOpener>())
+        if (other.TryGetComponent<DoorOpener>(out _doorOpener))
             _hasOpener = false;
     }
 

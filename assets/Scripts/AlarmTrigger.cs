@@ -3,6 +3,7 @@ using UnityEngine;
 public class AlarmTrriger : MonoBehaviour
 {
     [SerializeField] private Alarm _alarm;
+    [SerializeField] private Thief _thief;
 
     private bool _hasThief;
     private bool _isActive;
@@ -15,13 +16,13 @@ public class AlarmTrriger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.GetComponent<Thief>())
+        if (other.TryGetComponent<Thief>(out _thief))
             _hasThief = true;
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.GetComponent<Thief>())
+        if (other.TryGetComponent<Thief>(out _thief))
             _hasThief = false;
     }
 
